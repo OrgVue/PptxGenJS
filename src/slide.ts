@@ -237,4 +237,12 @@ export default class Slide {
 		})
 		return group
 	}
+
+	addRawXml(rawXml: string): Slide {
+		this._slideObjects.push({
+			_type: SLIDE_OBJECT_TYPES.rawXml,
+			rawXml,
+		})
+		return this
+	}
 }

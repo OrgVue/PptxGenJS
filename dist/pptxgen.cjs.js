@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-03-26T13:34:49.636Z */
+/* PptxGenJS 3.5.0-beta @ 2021-04-01T10:48:53.404Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -554,6 +554,7 @@ var SLIDE_OBJECT_TYPES;
     SLIDE_OBJECT_TYPES["tablecell"] = "tablecell";
     SLIDE_OBJECT_TYPES["text"] = "text";
     SLIDE_OBJECT_TYPES["notes"] = "notes";
+    SLIDE_OBJECT_TYPES["rawXml"] = "rawXml";
 })(SLIDE_OBJECT_TYPES || (SLIDE_OBJECT_TYPES = {}));
 var PLACEHOLDER_TYPES;
 (function (PLACEHOLDER_TYPES) {
@@ -1912,6 +1913,9 @@ function slideItemObjsToXml(slideItemObjs, slide) {
                     strSlideXml += res.xmlStr;
                     strSlideXml += '</p:grpSp>';
                 }
+                break;
+            case SLIDE_OBJECT_TYPES.rawXml:
+                strSlideXml += slideItemObj.rawXml;
                 break;
             default:
                 strSlideXml += '';
@@ -4358,6 +4362,13 @@ var Slide = /** @class */ (function () {
         });
         return group;
     };
+    Slide.prototype.addRawXml = function (rawXml) {
+        this._slideObjects.push({
+            _type: SLIDE_OBJECT_TYPES.rawXml,
+            rawXml: rawXml,
+        });
+        return this;
+    };
     return Slide;
 }());
 
@@ -6547,6 +6558,7 @@ var PptxGenJS = /** @class */ (function () {
             addTable: null,
             addText: null,
             addGroup: null,
+            addRawXml: null,
             //
             _name: null,
             _presLayout: this._presLayout,

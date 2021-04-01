@@ -1318,6 +1318,7 @@ export interface ISlideObject {
 	mediaRid?: number
 	shape?: SHAPE_NAME
 	group?: Group
+	rawXml?: string
 }
 // PRIVATE ^^^
 
@@ -1441,6 +1442,7 @@ export interface PresSlide extends SlideBaseProps {
 	addTable: Function
 	addText: Function
 	addGroup: Function
+	addRawXml: Function
 
 	/**
 	 * Background color or image (`fill` | `path` | `data`)

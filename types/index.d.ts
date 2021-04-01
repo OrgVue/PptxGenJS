@@ -2088,6 +2088,7 @@ declare namespace PptxGenJS {
 		addTable: Function
 		addText: Function
 		addGroup: Function
+		addRawXml: Function
 
 		/**
 		 * Background color or image (`fill` | `path` | `data`)
@@ -2263,6 +2264,7 @@ declare namespace PptxGenJS {
 		 */
 		addText(text: string | TextProps[], options?: TextPropsOptions): Slide
 		addGroup(): Group
+		addRawXml(rawXml: string): Slide
 
 		/**
 		 * Background color

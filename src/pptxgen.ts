@@ -334,6 +334,7 @@ export default class PptxGenJS implements IPresentationProps {
 			addTable: null,
 			addText: null,
 			addGroup: null,
+			addRawXml: null,
 			//
 			_name: null,
 			_presLayout: this._presLayout,

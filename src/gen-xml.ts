@@ -660,6 +660,10 @@ function slideItemObjsToXml(slideItemObjs: ISlideObject[], slide: PresSlide | Sl
 				}
 				break
 
+			case SLIDE_OBJECT_TYPES.rawXml:
+				strSlideXml += slideItemObj.rawXml
+				break
+
 			default:
 				strSlideXml += ''
 				break
