@@ -31,6 +31,7 @@ import {
 	TextProps,
 	TextPropsOptions,
 } from './core-interfaces'
+import { addImageDefinition } from './gen-objects'
 import {
 	convertRotationDegrees,
 	createColorElement,
@@ -42,6 +43,14 @@ import {
 	inch2Emu,
 	valToPts,
 } from './gen-utils'
+import xmldom from 'xmldom'
+
+// Takes serialized xml and removes the root node
+// ex. <root><node></node></node></root> => <node></node></node>
+const removeRootNode = (serializedXml: string): string => {
+	const indexOfFirstOpenTag = serializedXml.indexOf('>') + 1
+	return serializedXml.substr(indexOfFirstOpenTag, serializedXml.lastIndexOf('</') - indexOfFirstOpenTag)
+}
 
 let imageSizingXml = {
 	cover: function (imgSize, boxDim) {
@@ -661,7 +670,40 @@ function slideItemObjsToXml(slideItemObjs: ISlideObject[], slide: PresSlide | Sl
 				break
 
 			case SLIDE_OBJECT_TYPES.rawXml:
-				strSlideXml += slideItemObj.rawXml
+				{
+					if ('_slideId' in slide) {
+						const imageCache: Record<string, number> = {} // maps base64 encoded image data to an rId
+						const aBlips = slideItemObj.rawXml.getElementsByTagName('a:blip')
+						for (let i = 0; i < aBlips.length; i++) {
+							const el = aBlips.item(i)
+							const imageData = el.getAttribute('r:embed')
+							let imageRid: number
+							if (imageCache[imageData]) {
+								imageRid = imageCache[imageData]
+							} else {
+								const containerForResult: ISlideObject[] = []
+								addImageDefinition(
+									{
+										_slideObjects: containerForResult,
+									},
+									slide,
+									{
+										data: imageData,
+									}
+								)
+								imageRid = containerForResult[0].imageRid
+								imageCache[imageData] = imageRid
+							}
+
+							el.setAttribute('r:embed', `rId${imageRid}`)
+						}
+						slideItemObj.rawXml
+					}
+
+					const serializedXml = new xmldom.XMLSerializer().serializeToString(slideItemObj.rawXml)
+					// We remove the root node because we don't want the XML to be grouped by any container
+					strSlideXml += removeRootNode(serializedXml)
+				}
 				break
 
 			default:

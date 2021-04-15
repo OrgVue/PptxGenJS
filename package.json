@@ -33,9 +33,11 @@
   },
   "dependencies": {
     "@types/node": "^14.14.10",
+    "@types/xmldom": "^0.1.30",
     "https": "^1.0.0",
     "image-size": "^0.9.3",
-    "jszip": "^3.5.0"
+    "jszip": "^3.5.0",
+    "xmldom": "^0.5.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",

@@ -1318,7 +1318,7 @@ export interface ISlideObject {
 	mediaRid?: number
 	shape?: SHAPE_NAME
 	group?: Group
-	rawXml?: string
+	rawXml?: Element
 }
 // PRIVATE ^^^
 

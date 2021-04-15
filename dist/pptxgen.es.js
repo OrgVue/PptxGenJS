@@ -1,5 +1,6 @@
-/* PptxGenJS 3.5.0-beta @ 2021-04-12T13:04:41.620Z */
+/* PptxGenJS 3.5.0-beta @ 2021-04-15T11:14:06.439Z */
 import JSZip from 'jszip';
+import xmldom from 'xmldom';
 
 /**
  * PptxGenJS Enums
@@ -1348,6 +1349,12 @@ function genTableToSlides(pptx, tabEleId, options, masterSlide) {
 /**
  * PptxGenJS: XML Generation
  */
+// Takes serialized xml and removes the root node
+// ex. <root><node></node></node></root> => <node></node></node>
+var removeRootNode = function (serializedXml) {
+    var indexOfFirstOpenTag = serializedXml.indexOf('>') + 1;
+    return serializedXml.substr(indexOfFirstOpenTag, serializedXml.lastIndexOf('</') - indexOfFirstOpenTag);
+};
 var imageSizingXml = {
     cover: function (imgSize, boxDim) {
         var imgRatio = imgSize.h / imgSize.w, boxRatio = boxDim.h / boxDim.w, isBoxBased = boxRatio > imgRatio, width = isBoxBased ? boxDim.h / imgRatio : boxDim.w, height = isBoxBased ? boxDim.h : boxDim.w * imgRatio, hzPerc = Math.round(1e5 * 0.5 * (1 - boxDim.w / width)), vzPerc = Math.round(1e5 * 0.5 * (1 - boxDim.h / height));
@@ -1909,7 +1916,35 @@ function slideItemObjsToXml(slideItemObjs, slide) {
                 }
                 break;
             case SLIDE_OBJECT_TYPES.rawXml:
-                strSlideXml += slideItemObj.rawXml;
+                {
+                    if ('_slideId' in slide) {
+                        var imageCache = {}; // maps base64 encoded image data to an rId
+                        var aBlips = slideItemObj.rawXml.getElementsByTagName('a:blip');
+                        for (var i = 0; i < aBlips.length; i++) {
+                            var el = aBlips.item(i);
+                            var imageData = el.getAttribute('r:embed');
+                            var imageRid = void 0;
+                            if (imageCache[imageData]) {
+                                imageRid = imageCache[imageData];
+                            }
+                            else {
+                                var containerForResult = [];
+                                addImageDefinition({
+                                    _slideObjects: containerForResult,
+                                }, slide, {
+                                    data: imageData,
+                                });
+                                imageRid = containerForResult[0].imageRid;
+                                imageCache[imageData] = imageRid;
+                            }
+                            el.setAttribute('r:embed', "rId" + imageRid);
+                        }
+                        slideItemObj.rawXml;
+                    }
+                    var serializedXml = new xmldom.XMLSerializer().serializeToString(slideItemObj.rawXml);
+                    // We remove the root node because we don't want the XML to be grouped by any container
+                    strSlideXml += removeRootNode(serializedXml);
+                }
                 break;
             default:
                 strSlideXml += '';
@@ -3354,7 +3389,7 @@ function addChartDefinition(target, slide, type, data, opt) {
  * @note: Remote images (eg: "http://whatev.com/blah"/from web and/or remote server arent supported yet - we'd need to create an <img>, load it, then send to canvas
  * @see: https://stackoverflow.com/questions/164181/how-to-fetch-a-remote-image-to-display-in-a-canvas)
  */
-function addImageDefinition(container, slide, opt) {
+function addImageDefinition(target, slide, opt) {
     var newObject = {
         _type: null,
         text: null,
@@ -3478,7 +3513,7 @@ function addImageDefinition(container, slide, opt) {
         }
     }
     // STEP 6: Add object to slide
-    slide._slideObjects.push(newObject);
+    target._slideObjects.push(newObject);
 }
 /**
  * Adds a media object to a slide definition.

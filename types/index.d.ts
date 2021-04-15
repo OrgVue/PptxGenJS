@@ -2264,7 +2264,7 @@ declare namespace PptxGenJS {
 		 */
 		addText(text: string | TextProps[], options?: TextPropsOptions): Slide
 		addGroup(): Group
-		addRawXml(rawXml: string): Slide
+		addRawXml(rawXml: Element): Slide
 
 		/**
 		 * Background color
