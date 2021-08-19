@@ -43,7 +43,7 @@ import {
 	inch2Emu,
 	valToPts,
 } from './gen-utils'
-import xmldom from 'xmldom'
+import xmldom from '@xmldom/xmldom'
 
 // Takes serialized xml and removes the root node
 // ex. <root><node></node></node></root> => <node></node></node>
