@@ -1,6 +1,6 @@
-/* PptxGenJS 3.5.0-beta @ 2021-04-15T11:14:06.439Z */
+/* PptxGenJS 3.5.0-beta @ 2021-08-20T11:14:33.470Z */
 import JSZip from 'jszip';
-import xmldom from 'xmldom';
+import xmldom from '@xmldom/xmldom';
 
 /**
  * PptxGenJS Enums

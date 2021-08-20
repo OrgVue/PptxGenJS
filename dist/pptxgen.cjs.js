@@ -1,8 +1,8 @@
-/* PptxGenJS 3.5.0-beta @ 2021-04-15T11:14:06.380Z */
+/* PptxGenJS 3.5.0-beta @ 2021-08-20T11:14:33.463Z */
 'use strict';
 
 var JSZip = require('jszip');
-var xmldom = require('xmldom');
+var xmldom = require('@xmldom/xmldom');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
