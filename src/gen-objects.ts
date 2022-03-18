@@ -957,6 +957,9 @@ export function addTextDefinition(target: Container, slide: PresSlide, text: Tex
 			itemOpts._bodyProp.anchor = !itemOpts.placeholder ? TEXT_VALIGN.ctr : null // VALS: [t,ctr,b]
 			itemOpts._bodyProp.vert = itemOpts.vert || null // VALS: [eaVert,horz,mongolianVert,vert,vert270,wordArtVert,wordArtVertRtl]
 			itemOpts._bodyProp.wrap = typeof itemOpts.wrap === 'boolean' ? itemOpts.wrap : true
+			if (itemOpts.ellipsis === true) {
+				itemOpts._bodyProp.vertOverflow = 'ellipsis'
+			}
 
 			// E: Inset
 			if ((itemOpts.inset && !isNaN(Number(itemOpts.inset))) || itemOpts.inset === 0) {

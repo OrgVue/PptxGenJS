@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-08-20T11:14:33.463Z */
+/* PptxGenJS 3.5.0-beta @ 2022-03-18T13:56:17.836Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -2394,6 +2394,9 @@ function genXmlBodyProperties(slideObject) {
         // PPT-2019 EX: <a:bodyPr wrap="square" lIns="1270" tIns="1270" rIns="1270" bIns="1270" rtlCol="0" anchor="ctr"/>
         // A: Enable or disable textwrapping none or square
         bodyProperties += slideObject.options._bodyProp.wrap ? ' wrap="square"' : ' wrap="none"';
+        if (slideObject.options._bodyProp.vertOverflow) {
+            bodyProperties += " vertOverflow=\"" + slideObject.options._bodyProp.vertOverflow + "\"";
+        }
         // B: Textbox margins [padding]
         if (slideObject.options._bodyProp.lIns || slideObject.options._bodyProp.lIns === 0)
             bodyProperties += ' lIns="' + slideObject.options._bodyProp.lIns + '"';
@@ -4010,6 +4013,9 @@ function addTextDefinition(target, slide, text, opts, isPlaceholder) {
             itemOpts._bodyProp.anchor = !itemOpts.placeholder ? TEXT_VALIGN.ctr : null; // VALS: [t,ctr,b]
             itemOpts._bodyProp.vert = itemOpts.vert || null; // VALS: [eaVert,horz,mongolianVert,vert,vert270,wordArtVert,wordArtVertRtl]
             itemOpts._bodyProp.wrap = typeof itemOpts.wrap === 'boolean' ? itemOpts.wrap : true;
+            if (itemOpts.ellipsis === true) {
+                itemOpts._bodyProp.vertOverflow = 'ellipsis';
+            }
             // E: Inset
             if ((itemOpts.inset && !isNaN(Number(itemOpts.inset))) || itemOpts.inset === 0) {
                 itemOpts._bodyProp.lIns = inch2Emu(itemOpts.inset);

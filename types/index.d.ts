@@ -1690,6 +1690,8 @@ declare namespace PptxGenJS {
 		 */
 		wrap?: boolean
 
+		ellipsis?: boolean
+
 		/**
 		 * Whather "Fit to Shape?" is enabled
 		 * @deprecated v3.3.0 - use `fit`

@@ -1175,6 +1175,9 @@ function genXmlBodyProperties(slideObject: ISlideObject | TableCell): string {
 
 		// A: Enable or disable textwrapping none or square
 		bodyProperties += slideObject.options._bodyProp.wrap ? ' wrap="square"' : ' wrap="none"'
+		if (slideObject.options._bodyProp.vertOverflow) {
+			bodyProperties += ` vertOverflow="${slideObject.options._bodyProp.vertOverflow}"`
+		}
 
 		// B: Textbox margins [padding]
 		if (slideObject.options._bodyProp.lIns || slideObject.options._bodyProp.lIns === 0) bodyProperties += ' lIns="' + slideObject.options._bodyProp.lIns + '"'

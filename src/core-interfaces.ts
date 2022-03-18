@@ -848,6 +848,7 @@ export interface TextPropsOptions extends PositionProps, DataOrPathProps, TextBa
 		bIns?: number
 		vert?: 'eaVert' | 'horz' | 'mongolianVert' | 'vert' | 'vert270' | 'wordArtVert' | 'wordArtVertRtl'
 		wrap?: boolean
+		vertOverflow?: 'ellipsis'
 	}
 	_lineIdx?: number
 
@@ -933,6 +934,9 @@ export interface TextPropsOptions extends PositionProps, DataOrPathProps, TextBa
 	 * @default true
 	 */
 	wrap?: boolean
+
+	// truncate text using ellipsis, maps to vertOverflow "ellipsis"
+	ellipsis?: boolean
 
 	/**
 	 * Whather "Fit to Shape?" is enabled
